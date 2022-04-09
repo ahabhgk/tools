@@ -410,7 +410,7 @@ a + b * c > 65 + 5;
         });
         assert_eq!(
             result.as_code(),
-            r#"(a + (b * c)) > 65;
+            r#"(a + (b * c)) > (65 + 5);
 "#
         );
     }
