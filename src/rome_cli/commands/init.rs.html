@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/rome_cli/src/commands/init.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>init.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rome_cli/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../rome_cli/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rome_cli/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">CliSession</span>, <span class="ident">Termination</span>};
+<span class="kw">use</span> <span class="ident">rome_console</span>::{<span class="ident">markup</span>, <span class="ident">ConsoleExt</span>};
+<span class="kw">use</span> <span class="ident">rome_service::configuration::Configuration</span>;
+<span class="kw">use</span> <span class="ident">rome_service::create_config</span>;
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">mut</span> <span class="ident">session</span>: <span class="ident">CliSession</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Termination</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">fs</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">fs</span>;
+    <span class="ident">create_config</span>(<span class="ident">fs</span>, <span class="ident">Configuration::default</span>())<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="macro">markup!</span> {
+                    <span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Files created:\n\n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Info</span><span class="op">&gt;</span>
+                    <span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;\t- rome.json: &quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Your project configuration. Documentation: &quot;</span><span class="op">&lt;</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;https://rome.tools/#project-configuration \n\n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Underline</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;What&#39;s next?\n\n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Info</span><span class="op">&gt;</span>
+    <span class="string">&quot;\t1. &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Setup an editor extension\n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span>
+            <span class="string">&quot;\t\tGet live errors as you type and format when you save. Learn more:&quot;</span><span class="op">&lt;</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;https://rome.tools/#install-official-rome-vs-code-extension \n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Underline</span><span class="op">&gt;</span>
+    <span class="string">&quot;\t2. &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Try a command\n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span>
+            <span class="op">&lt;</span><span class="ident">Italic</span><span class="op">&gt;</span><span class="string">&quot;\t\trome check&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Italic</span><span class="op">&gt;</span><span class="string">&quot; is used to validate your code, verify formatting, and check for lint errors. Run &quot;</span> <span class="op">&lt;</span><span class="ident">Italic</span><span class="op">&gt;</span><span class="string">&quot;rome --help&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Italic</span><span class="op">&gt;</span><span class="string">&quot; for a full list of commands and flags\n&quot;</span>
+    <span class="string">&quot;\t3. &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Read documentation \n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span>
+            <span class="string">&quot;\t\tOur website serves as a comprehensive source of guides and documentation: &quot;</span><span class="op">&lt;</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;https://rome.tools/ \n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Underline</span><span class="op">&gt;</span>
+    <span class="string">&quot;\t4. &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Get involved in the community\n&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span>
+            <span class="string">&quot;\t\tAsk questions, get support, or contribute by participating on GitHub (&quot;</span><span class="op">&lt;</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;https://github.com/rome/tools&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;), or our community Discord (&quot;</span><span class="op">&lt;</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;https://discord.gg/rome&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Underline</span><span class="op">&gt;</span><span class="string">&quot;)&quot;</span>
+
+                    };
+
+    <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">console</span>.<span class="ident">log</span>(<span class="ident">message</span>);
+
+    <span class="prelude-val">Ok</span>(())
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rome_cli" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

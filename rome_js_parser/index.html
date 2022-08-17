@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Extremely fast, lossless, and error tolerant JavaScript Parser."><meta name="keywords" content="rust, rustlang, rust-lang, rome_js_parser"><title>rome_js_parser - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script defer src="../crates.js"></script><script defer src="../main.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../rome_js_parser/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../rome_js_parser/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Crate rome_js_parser</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.0.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul></div><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../rome_js_parser/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">rome_js_parser</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/rome_js_parser/lib.rs.html#1-464">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Extremely fast, lossless, and error tolerant JavaScript Parser.</p>
+<p>The parser uses an abstraction over non-whitespace tokens.
+This allows us to losslessly or lossly parse code without requiring explicit handling of whitespace.
+The parser yields events, not an AST, the events are resolved into untyped syntax nodes, which can then
+be casted into a typed AST.</p>
+<p>The parser is able to produce a valid AST from <strong>any</strong> source code.
+Erroneous productions are wrapped into <code>ERROR</code> syntax nodes, the original source code
+is completely represented in the final syntax nodes.</p>
+<p>You probably do not want to use the parser struct, unless you want to parse fragments of Js source code or make your own productions.
+Instead use functions such as <a href="fn.parse_script.html" title="parse_script">parse_script</a>, <a href="fn.parse_module.html" title="parse_module">parse_module</a>, and [] which offer abstracted versions for parsing.</p>
+<p>Notable features of the parser are:</p>
+<ul>
+<li>Extremely fast parsing and lexing through the extremely fast lexer.</li>
+<li>Ability to do Lossy or Lossless parsing on demand without explicit whitespace handling.</li>
+<li>Customizable, able to parse any fragments of JS code at your discretion.</li>
+<li>Completely error tolerant, able to produce an AST from any source code.</li>
+<li>Zero cost for converting untyped nodes to a typed AST.</li>
+<li>Ability to go from AST to SyntaxNodes to SyntaxTokens to source code and back very easily with nearly zero cost.</li>
+<li>Very easy tree traversal through <a href="../rome_rowan/syntax/node/struct.SyntaxNode.html"><code>SyntaxNode</code></a>.</li>
+<li>Descriptive errors with multiple labels and notes.</li>
+<li>Very cheap cloning, cloning an ast node or syntax node is the cost of adding a reference to an Rc.</li>
+<li>Cheap incremental reparsing of changed text.</li>
+</ul>
+<p>The crate further includes utilities such as:</p>
+<ul>
+<li>ANSI syntax highlighting of nodes or text through <code>lexer</code>.</li>
+</ul>
+<p>It is inspired by the rust analyzer parser but adapted for JavaScript.</p>
+<h2 id="syntax-nodes-vs-ast-nodes"><a href="#syntax-nodes-vs-ast-nodes">Syntax Nodes vs AST Nodes</a></h2>
+<p>The crate relies on a concept of untyped <a href="../rome_js_syntax/syntax_node/type.JsSyntaxNode.html" title="rome_js_syntax::JsSyntaxNode">rome_js_syntax::JsSyntaxNode</a>s vs typed <a href="../rome_rowan/ast/trait.AstNode.html" title="rome_rowan::AstNode">rome_rowan::AstNode</a>s.
+Syntax nodes represent the syntax tree in an untyped way. They represent a location in an immutable
+tree with two pointers. The syntax tree is composed of <a href="../rome_js_syntax/syntax_node/type.JsSyntaxNode.html" title="rome_js_syntax::JsSyntaxNode">rome_js_syntax::JsSyntaxNode</a>s and <a href="../rome_js_syntax/syntax_node/type.JsSyntaxToken.html" title="rome_js_syntax::JsSyntaxToken">rome_js_syntax::JsSyntaxToken</a>s in a nested
+tree structure. Each node can have parents, siblings, children, descendants, etc.</p>
+<p><a href="../rome_rowan/ast/trait.AstNode.html" title="rome_rowan::AstNode">rome_rowan::AstNode</a>s represent a typed version of a syntax node. They have the same exact representation as syntax nodes
+therefore a conversion between either has zero runtime cost. Every piece of data of an ast node is optional,
+this is due to the fact that the parser is completely error tolerant.</p>
+<p>Each representation has its advantages:</p>
+<h4 id="syntaxnodes"><a href="#syntaxnodes">SyntaxNodes</a></h4>
+<ul>
+<li>Very simple traversing of the syntax tree through functions on them.</li>
+<li>Easily able to convert to underlying text, range, or tokens.</li>
+<li>Contain all whitespace bound to the underlying production (in the case of lossless parsing).</li>
+<li>Can be easily converted into its typed representation with zero cost.</li>
+<li>Can be turned into a pretty representation with fmt debug.</li>
+</ul>
+<h4 id="ast-nodes"><a href="#ast-nodes">AST Nodes</a></h4>
+<ul>
+<li>Easy access to properties of the underlying production.</li>
+<li>Zero cost conversion to a syntax node.</li>
+</ul>
+<p>In conclusion, the use of both representations means we are not constrained to acting through
+typed nodes. Which makes traversal hard and you often have to resort to autogenerated visitor patterns.
+AST nodes are simply a way to easily access subproperties of a syntax node.event;</p>
+<h2 id="authoring-parse-rules"><a href="#authoring-parse-rules">Authoring Parse Rules</a></h2>
+<p>This is a short, or not so short, guide to implement parse rules using the Rome parser infrastructure.</p>
+<h3 id="naming"><a href="#naming">Naming</a></h3>
+<p>The convention is to prefix your parse rule with <code>parse_</code> and then use the name defined in the grammar file.</p>
+<p>For example, <code>parse_for_statement</code> or <code>parse_expression</code>.</p>
+<h3 id="signature"><a href="#signature">Signature</a></h3>
+<p>Most parse rules take a <code>&amp;mut</code> reference to the parser as their only parameter and return a <code>ParsedSyntax</code>.</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">fn</span> <span class="ident">parse_rule_name</span>(<span class="kw-2">&amp;mut</span>: <span class="ident">Parser</span>) -&gt; <span class="ident">ParsedSyntax</span> {}</code></pre></div>
+<p>You’re free to add additional parameters to your function if needed. There are rare cases where you want to consider returning <code>ConditionalParsedSyntax</code> as explained in <a href="#conditional-syntax">conditional syntax</a></p>
+<h3 id="parsing-a-single-node"><a href="#parsing-a-single-node">Parsing a single node</a></h3>
+<p>Let’s assume you want to parse the JS <code>if</code> statement:</p>
+<div class="example-wrap"><pre class="language-js"><code>JsIfStatement =
+ if
+ (
+ test: JsAnyExpression
+ )
+ consequent: JsBlockStatement
+ else_clause: JsElseClause?</code></pre></div><h4 id="presence-test"><a href="#presence-test">Presence Test</a></h4>
+<p>Now, the parsing function must first test if the parser is positioned at an <code>if</code> statement and return <code>Absent</code> if that’s not the case.</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">if</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">at</span>(<span class="macro">T!</span>[<span class="kw">if</span>]) {
+ <span class="kw">return</span> <span class="ident">ParsedSyntax::Absent</span>;
+}</code></pre></div>
+<p>Why return <code>ParsedSyntax::Absent</code>? The function must return <code>ParsedSyntax::Absent</code> if the rule can’t predict by the next token(s) if they form the expected node or not. Doing so allows the calling rule to decide if this is an error and perform an error recovery if necessary.  The second reason is to ensure that the rule doesn’t return a node where all children are missing.</p>
+<p>Your rule implementation may want to consider more than just the first child to determine if it can parse at least some of the expected children.
+For example, the if statement rule could test if the parser is located at an <code>else</code> clause and then create an <code>if</code> statement where all children are missing except the <code>else</code> clause:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">if</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">at</span>(<span class="macro">T!</span>[<span class="kw">if</span>]) <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">at</span>(<span class="macro">T!</span>[<span class="kw">else</span>]){
+  <span class="kw">return</span> <span class="ident">Absent</span>
+}</code></pre></div>
+<p>Your implementation can also call into another parsing rule if the first child is a node and not a token.</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">let</span> <span class="ident">assignment_target</span> <span class="op">=</span> <span class="ident">parse_assignment_target</span>(<span class="ident">p</span>);
+
+<span class="kw">if</span> <span class="ident">assignment_target</span>.<span class="ident">is_absent</span>() {
+  <span class="kw">return</span> <span class="ident">Absent</span>;
+}
+
+<span class="kw">let</span> <span class="ident">my_node</span> <span class="op">=</span> <span class="ident">assignment_target</span>.<span class="ident">precede_or_missing</span>();</code></pre></div>
+<p>But be careful with calling other rules. Your rule mustn’t progress the parser - meaning that it can’t
+advance in the parsing process and consume tokens - if it returns <code>Absent</code>.</p>
+<h4 id="parse-children"><a href="#parse-children">Parse children</a></h4>
+<p>The parse rules will guide you in how to write your implementation and the parser infrastructure provides the following convenience APIs:</p>
+<ul>
+<li>Optional token <code>'ident'?</code>: Use <code>p.eat(token)</code>. It eats the next token if it matches the passed-in token.</li>
+<li>Required token <code>'ident'</code>: Use<code>p.expect(token)</code>. It eats the next token if it matches the passed-in token.
+It adds an <code>Expected 'x' but found 'y' instead</code> error and a missing marker if the token isn’t present in the source code.</li>
+<li>Optional node <code>body: JsBlockStatement?</code>: Use<code>parse_block_statement(p).or_missing(p)</code>. It parses the block if it is present in the source code and adds a missing marker if it isn’t.</li>
+<li>Required node <code>body: JsBlockStatement</code>: Use <code>parse_block_statement(p).or_missing_with_error(p, error_builder)</code>:
+it parses the block statement if it is present in the source code and adds a missing marker and an error if not.</li>
+</ul>
+<p>Using the above-described rules result in the following implementation for the <code>if</code> statement rule.</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">fn</span> <span class="ident">parse_if_statement</span>(<span class="ident">p</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParsedSyntax</span> {
+ <span class="kw">if</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">at</span>(<span class="macro">T!</span>[<span class="kw">if</span>]) {
+  <span class="kw">return</span> <span class="ident">Absent</span>;
+ }
+
+ <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">p</span>.<span class="ident">start</span>();
+
+ <span class="ident">p</span>.<span class="ident">expect</span>(<span class="macro">T!</span>[<span class="kw">if</span>]);
+ <span class="ident">p</span>.<span class="ident">expect</span>(<span class="macro">T!</span>[<span class="string">&#39;(&#39;</span>]);
+ <span class="ident">parse_any_expression</span>(<span class="ident">p</span>).<span class="ident">or_add_diagnostic</span>(<span class="ident">p</span>, <span class="ident">js_parse_errors::expeced_if_statement</span>);
+ <span class="ident">p</span>.<span class="ident">expect</span>(<span class="macro">T!</span>[<span class="string">&#39;)&#39;</span>]);
+ <span class="ident">parse_block_statement</span>(<span class="ident">p</span>).<span class="ident">or_add_diagnostic</span>(<span class="ident">p</span>, <span class="ident">js_parse_errors::expected_block_statement</span>);
+<span class="comment">// the else block is optional, handle the marker by using `ok`</span>
+ <span class="ident">parse_else_clause</span>(<span class="ident">p</span>).<span class="ident">ok</span>();
+
+ <span class="ident">Present</span>(<span class="ident">m</span>.<span class="ident">complete</span>(<span class="ident">p</span>, <span class="ident">JS_IF_STATEMENT</span>));
+}</code></pre></div>
+<p>Hold on, what are these <em>missing</em> markers? Rome’s AST facade uses fixed offsets to retrieve a particular child from a node.
+For example, the 3rd child of the if statement is the condition. However, the condition would become the second element
+if the opening parentheses <code>(</code> isn’t present in the source text. That’s where missing elements come into play.</p>
+<h3 id="parsing-lists--error-recovery"><a href="#parsing-lists--error-recovery">Parsing Lists &amp; Error Recovery</a></h3>
+<p>Parsing lists is different from parsing single elements with a fixed set of children because it requires looping until
+the parser reaches a terminal token (or the end of the file).</p>
+<p>You may remember that <code>parse_*</code> methods shouldn’t progress parsing if they return <code>Absent</code>.
+Not progressing the parser is problematic inside <code>while</code> loops because it inevitably results in an infinite loop.</p>
+<p>That’s why you must do error recovery when parsing lists. Luckily, the parser comes with the infrastructure to make error recovery a piece of cake.
+The general structure for parsing a list is (yes, that’s something the parser infrastructure should provide for you):</p>
+<p>Let’s try to parse an array:</p>
+<div class="example-wrap"><pre class="language-js"><code>[ 1, 3, 6 ]</code></pre></div>
+<p>We will use  <code>ParseSeparatedList</code> in order to achieve that</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">struct</span> <span class="ident">ArrayElementsList</span>;
+
+<span class="kw">impl</span> <span class="ident">ParseSeparatedList</span> <span class="kw">for</span> <span class="ident">ArrayElementsList</span> {
+    <span class="kw">type</span> <span class="ident">ParsedElement</span> <span class="op">=</span> <span class="ident">CompletedMarker</span>;
+
+    <span class="kw">fn</span> <span class="ident">parse_element</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParsedSyntax</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::ParsedElement</span><span class="op">&gt;</span> {
+        <span class="ident">parse_array_element</span>(<span class="ident">p</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">is_at_list_end</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">bool</span> {
+        <span class="ident">p</span>.<span class="ident">at_ts</span>(<span class="macro">token_set!</span>[<span class="macro">T!</span>[<span class="ident">default</span>], <span class="macro">T!</span>[<span class="ident">case</span>], <span class="macro">T!</span>[<span class="string">&#39;}&#39;</span>]])
+    }
+
+    <span class="kw">fn</span> <span class="ident">recover</span>(
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">p</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Parser</span>,
+        <span class="ident">parsed_element</span>: <span class="ident">ParsedSyntax</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::ParsedElement</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="ident">parser::RecoveryResult</span> {
+        <span class="ident">parsed_element</span>.<span class="ident">or_recover</span>(
+            <span class="ident">p</span>,
+            <span class="kw-2">&amp;</span><span class="ident">ParseRecovery::new</span>(<span class="ident">JS_UNKNOWN_STATEMENT</span>, <span class="ident">STMT_RECOVERY_SET</span>),
+            <span class="ident">js_parse_error::expected_case</span>,
+        )
+    }
+};</code></pre></div>
+<p>Let’s run through this step by step:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="ident">parsed_element</span>.<span class="ident">or_recover</span>(
+    <span class="ident">p</span>,
+    <span class="kw-2">&amp;</span><span class="ident">ParseRecovery::new</span>(<span class="ident">JS_UNKNOWN_STATEMENT</span>, <span class="ident">STMT_RECOVERY_SET</span>),
+    <span class="ident">js_parse_error::expected_case</span>,
+)</code></pre></div>
+<p>The <code>or_recover</code> performs an error recovery if the <code>parse_array_element</code> method returns <code>Absent</code>;
+there’s no array element in the source text.</p>
+<p>The recovery eats all tokens until it finds one of the tokens specified in the <code>token_set</code>,
+a line break (if you called <code>enable_recovery_on_line_break</code>) or the end of the file.</p>
+<p>The recovery doesn’t throw the tokens away but instead wraps them inside a <code>UNKNOWN_JS_EXPRESSION</code> node (first parameter).
+There exist multiple <code>UNKNOWN_*</code> nodes. You must consult the grammar to understand which <code>UNKNOWN*</code> node is supported in your case.</p>
+<blockquote>
+<p>You usually want to include the terminal token ending your list, the element separator token, and the token terminating a statement in your recovery set.</p>
+</blockquote>
+<p>Now, the problem with recovery is that it can fail, and there are two reasons:</p>
+<ul>
+<li>the parser reached the end of the file;</li>
+<li>the next token is one of the tokens specified in the recovery set, meaning there is nothing to recover from;</li>
+</ul>
+<p>In these cases the <code>ParseSeparatedList</code> and <code>ParseNodeList</code> will recover the parser for you.</p>
+<h3 id="conditional-syntax"><a href="#conditional-syntax">Conditional Syntax</a></h3>
+<p>The conditional syntax allows you to express that some syntax may not be valid in all source files. Some use cases are:</p>
+<ul>
+<li>syntax that is only supported in strict or sloppy mode: for example, <code>with</code> statements is not valid when a JavaScript file uses <code>&quot;use strict&quot;</code> or is a module;</li>
+<li>syntax that is only supported in certain file types: Typescript, JSX, modules;</li>
+<li>syntax that is only available in specific language versions: experimental features, different versions of the language e.g. (ECMA versions for JavaScript);</li>
+</ul>
+<p>The idea is that the parser always parses the syntax regardless of whatever it is supported in this specific file or context.
+The main motivation behind doing so is that this gives us perfect error recovery and allows us to use the same code regardless of whether the syntax is supported.</p>
+<p>However, conditional syntax must be handled because we want to add a diagnostic if the syntax isn’t supported for the current file, and the parsed tokens must be attached somewhere.</p>
+<p>Let’s have a look at the <code>with</code> statement that is only allowed in loose mode/sloppy mode:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">fn</span> <span class="ident">parse_with_statement</span>(<span class="ident">p</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParsedSyntax</span> {
+ <span class="kw">if</span> <span class="op">!</span><span class="ident">p</span>.<span class="ident">at</span>(<span class="macro">T!</span>[<span class="ident">with</span>]) {
+  <span class="kw">return</span> <span class="ident">Absent</span>;
+ }
+
+ <span class="kw">let</span> <span class="ident">m</span> <span class="op">=</span> <span class="ident">p</span>.<span class="ident">start</span>();
+ <span class="ident">p</span>.<span class="ident">bump</span>(<span class="macro">T!</span>[<span class="ident">with</span>]); <span class="comment">// with</span>
+ <span class="ident">parenthesized_expression</span>(<span class="ident">p</span>).<span class="ident">or_add_diagnostic</span>(<span class="ident">p</span>, <span class="ident">js_errors::expected_parenthesized_expression</span>);
+ <span class="ident">parse_statement</span>(<span class="ident">p</span>).<span class="ident">or_add_diagnostic</span>(<span class="ident">p</span>, <span class="ident">js_error::expected_statement</span>);
+ <span class="kw">let</span> <span class="ident">with_stmt</span> <span class="op">=</span> <span class="ident">m</span>.<span class="ident">complete</span>(<span class="ident">p</span>, <span class="ident">JS_WITH_STATEMENT</span>);
+
+ <span class="kw">let</span> <span class="ident">conditional</span> <span class="op">=</span> <span class="ident">StrictMode</span>.<span class="ident">excluding_syntax</span>(<span class="ident">p</span>, <span class="ident">with_stmt</span>, <span class="op">|</span><span class="ident">p</span>, <span class="ident">marker</span><span class="op">|</span> {
+  <span class="ident">p</span>.<span class="ident">err_builder</span>(<span class="string">&quot;`with` statements are not allowed in strict mode&quot;</span>)
+   .<span class="ident">primary</span>(<span class="ident">marker</span>.<span class="ident">range</span>(<span class="ident">p</span>), <span class="string">&quot;&quot;</span>)
+ });
+
+  
+}</code></pre></div>
+<p>The start of the rule is the same as for any other rule. The exciting bits start with</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="kw">let</span> <span class="ident">conditional</span> <span class="op">=</span> <span class="ident">StrictMode</span>.<span class="ident">excluding_syntax</span>(<span class="ident">p</span>, <span class="ident">with_stmt</span>, <span class="op">|</span><span class="ident">p</span>, <span class="ident">marker</span><span class="op">|</span> {
+ <span class="ident">p</span>.<span class="ident">err_builder</span>(<span class="string">&quot;`with` statements are not allowed in strict mode&quot;</span>)
+  .<span class="ident">primary</span>(<span class="ident">marker</span>.<span class="ident">range</span>(<span class="ident">p</span>), <span class="string">&quot;&quot;</span>)
+});</code></pre></div>
+<p>The <code>StrictMode.excluding_syntax</code> converts the parsed syntax to an unknown node and uses the diagnostic builder to create a diagnostic if the feature is not supported.</p>
+<p>You can convert the <code>ConditionalParsedSyntax</code> to a regular <code>ParsedSyntax</code> by calling <code>or_invalid_to_unknown</code>, which wraps the whole parsed <code>with</code> statement in an <code>UNKNOWN</code> node if the parser is in strict mode and otherwise returns the unchanged <code>with</code> statement.</p>
+<p>What if there’s no <code>UNKNOWN</code> node matching the node of your parse rule? You must then return the <code>ConditionalParsedSyntax</code> without making the <code>or_invalid_to_unknown</code> recovery. It’s then up to the caller to recover the potentially invalid syntax.</p>
+<h3 id="summary"><a href="#summary">Summary</a></h3>
+<ul>
+<li>Parse rules are named <code>parse_rule_name</code></li>
+<li>The parse rules should return a <code>ParsedSyntax</code></li>
+<li>The rule must return <code>Present</code> if it consumes any token and, therefore, can parse the node with at least some of its children.</li>
+<li>It returns <code>Absent</code> otherwise and must not progress parsing nor add any errors.</li>
+<li>Lists must perform error recovery to avoid infinite loops.</li>
+<li>Consult the grammar to identify the <code>UNKNOWN</code> node that is valid in the context of your rule.</li>
+</ul>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="syntax/index.html" title="rome_js_parser::syntax mod">syntax</a></div><div class="item-right docblock-short"><p>The Js syntax itself and parser functions.</p>
+</div></div></div><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.token_set.html" title="rome_js_parser::token_set macro">token_set</a></div><div class="item-right docblock-short"><p>Utility macro for making a new token set</p>
+</div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.LosslessTreeSink.html" title="rome_js_parser::LosslessTreeSink struct">LosslessTreeSink</a></div><div class="item-right docblock-short"><p>Structure for converting events to a syntax tree representation, while preserving whitespace.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Parse.html" title="rome_js_parser::Parse struct">Parse</a></div><div class="item-right docblock-short"><p>A utility struct for managing the result of a parser job</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.TokenSet.html" title="rome_js_parser::TokenSet struct">TokenSet</a></div><div class="item-right docblock-short"></div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Event.html" title="rome_js_parser::Event enum">Event</a></div><div class="item-right docblock-short"><p>Events emitted by the Parser, these events are later
+made into a syntax tree with <code>process</code> into TreeSink.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.JsSyntaxFeature.html" title="rome_js_parser::JsSyntaxFeature enum">JsSyntaxFeature</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.LexContext.html" title="rome_js_parser::LexContext enum">LexContext</a></div><div class="item-right docblock-short"><p>Context in which the lexer should lex the next token</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ReLexContext.html" title="rome_js_parser::ReLexContext enum">ReLexContext</a></div><div class="item-right docblock-short"><p>Context in which the <a href="enum.LexContext.html" title="LexContext">LexContext</a>’s current should be re-lexed.</p>
+</div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.TreeSink.html" title="rome_js_parser::TreeSink trait">TreeSink</a></div><div class="item-right docblock-short"><p>An abstraction for syntax tree implementations</p>
+</div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse.html" title="rome_js_parser::parse fn">parse</a></div><div class="item-right docblock-short"><p>Parses the provided string as a EcmaScript program using the provided syntax features.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_common.html" title="rome_js_parser::parse_common fn">parse_common</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_expression.html" title="rome_js_parser::parse_expression fn">parse_expression</a></div><div class="item-right docblock-short"><p>Losslessly Parse text into an expression <a href="struct.Parse.html"><code>Parse</code></a> which can then be turned into an untyped root <a href="../rome_js_syntax/syntax_node/type.JsSyntaxNode.html"><code>JsSyntaxNode</code></a>.
+Or turned into a typed <a href="../rome_js_syntax/generated/nodes/struct.JsExpressionSnipped.html"><code>JsExpressionSnipped</code></a> with <a href="struct.Parse.html#method.tree"><code>tree</code></a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_module.html" title="rome_js_parser::parse_module fn">parse_module</a></div><div class="item-right docblock-short"><p>Same as <code>parse_text</code> but configures the parser to parse an ECMAScript module instead of a script</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_script.html" title="rome_js_parser::parse_script fn">parse_script</a></div><div class="item-right docblock-short"><p>Parse text into a <a href="struct.Parse.html"><code>Parse</code></a> which can then be turned into an untyped root <a href="../rome_js_syntax/syntax_node/type.JsSyntaxNode.html"><code>JsSyntaxNode</code></a>.
+Or turned into a typed <a href="../rome_js_syntax/generated/nodes/struct.JsScript.html"><code>JsScript</code></a> with <a href="struct.Parse.html#method.tree"><code>tree</code></a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.process.html" title="rome_js_parser::process fn">process</a></div><div class="item-right docblock-short"><p>Generate the syntax tree with the control of events.</p>
+</div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ParseDiagnostic.html" title="rome_js_parser::ParseDiagnostic type">ParseDiagnostic</a></div><div class="item-right docblock-short"><p>The type of error emitted by the parser, this includes warnings, notes, and errors.
+It also includes labels and possibly notes</p>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="rome_js_parser" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

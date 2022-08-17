@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["LineEnding",""]],"struct":[["PrintWidth",""],["Printer","Prints the format elements into a string"],["PrinterOptions","Options that affect how the [crate::Printer] prints the format tokens"]]};

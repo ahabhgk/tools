@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":[["expr","Expressions, these include `this`, identifiers, arrays, objects, binary expressions, unary expressions, and more."],["program","Top level functions for parsing a script or module, also includes module specific items."]]};

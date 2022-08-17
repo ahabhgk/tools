@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["rome_js_formatter"] = [{"text":"impl <a class=\"trait\" href=\"rome_formatter/comments/trait.CommentStyle.html\" title=\"trait rome_formatter::comments::CommentStyle\">CommentStyle</a>&lt;<a class=\"struct\" href=\"rome_js_syntax/syntax_node/struct.JsLanguage.html\" title=\"struct rome_js_syntax::syntax_node::JsLanguage\">JsLanguage</a>&gt; for <a class=\"struct\" href=\"rome_js_formatter/context/struct.JsCommentStyle.html\" title=\"struct rome_js_formatter::context::JsCommentStyle\">JsCommentStyle</a>","synthetic":false,"types":["rome_js_formatter::context::JsCommentStyle"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

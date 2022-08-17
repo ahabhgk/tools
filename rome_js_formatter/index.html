@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Rome’s official JavaScript formatter."><meta name="keywords" content="rust, rustlang, rust-lang, rome_js_formatter"><title>rome_js_formatter - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script defer src="../crates.js"></script><script defer src="../main.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../rome_js_formatter/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../rome_js_formatter/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Crate rome_js_formatter</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.0.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul></div><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div></section></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../rome_js_formatter/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">rome_js_formatter</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/rome_js_formatter/lib.rs.html#1-741">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Rome’s official JavaScript formatter.</p>
+<h3 id="implement-the-formatter"><a href="#implement-the-formatter">Implement the formatter</a></h3>
+<p><code>Our formatter is node based. Meaning that each AST node knows how to format itself. In order to implement the formatting, a node has to implement the trait</code>FormatNode`.</p>
+<p><code>rome</code> has an automatic code generation that creates automatically the files out of the grammar.
+By default, all implementations will format verbatim,
+meaning that the formatter will print tokens and trivia as they are (<code>format_verbatim</code>).</p>
+<p>Our formatter has its own <a href="https://en.wikipedia.org/wiki/Intermediate_representation">internal IR</a>, it creates its own abstraction from an AST.</p>
+<p>The developer won’t be creating directly this IR, but they will use a series of utilities that will help
+to create this IR. The whole IR is represented by the <code>enum</code> <code>FormatElement</code>. Please refer to <a href="#build-the-documentation">its internal
+documentation</a> to understand the meaning of each variant.</p>
+<h4 id="rules-to-follow-when-implementing-a-formatter"><a href="#rules-to-follow-when-implementing-a-formatter">Rules to follow when implementing a formatter</a></h4>
+<ol>
+<li>
+<p>Use the <code>*Fields</code> struct to extract all the tokens/nodes</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormatJsExportDefaultExpressionClause</span>;
+
+<span class="kw">impl</span> <span class="ident">FormatNodeRule</span><span class="op">&lt;</span><span class="ident">JsExportDefaultExpressionClause</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FormatJsExportDefaultExpressionClauses</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_fields</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;</span><span class="ident">JsExportDefaultExpressionClause</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">JsFormatter</span>) -&gt; <span class="ident">FormatResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">JsExportDefaultExpressionClauseFields</span> {
+            <span class="ident">default_token</span>,
+            <span class="ident">expression</span>,
+            <span class="ident">semicolon_token</span>,
+        }  <span class="op">=</span> <span class="ident">node</span>.<span class="ident">as_fields</span>();
+   }
+}</code></pre></div>
+</li>
+<li>
+<p>When using <code>.as_fields()</code> with the destructuring, don’t use the <code>..</code> feature. Prefer extracting all fields and ignore them
+using the <code>_</code></p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormatJsExportDefaultExpressionClause</span>;
+
+<span class="kw">impl</span> <span class="ident">FormatNodeRule</span><span class="op">&lt;</span><span class="ident">JsExportDefaultExpressionClause</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FormatJsExportDefaultExpressionClauses</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_fields</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;</span><span class="ident">JsExportDefaultExpressionClause</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">JsFormatter</span>) -&gt; <span class="ident">FormatResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+         <span class="kw">let</span> <span class="ident">JsExportDefaultExpressionClauseFields</span> {
+             <span class="ident">default_token</span>,
+             <span class="ident">expression</span>: <span class="kw">_</span>,
+             <span class="ident">semicolon_token</span>
+         } <span class="op">=</span> <span class="ident">node</span>.<span class="ident">as_fields</span>();
+     }
+}</code></pre></div>
+<p>The reason why we want to promote this pattern is because we want to make explicit when a token/node is excluded;</p>
+</li>
+<li>
+<p>Use the APIs provided by <code>builders.rs</code>, <code>formatter</code> and <code>format_extensions.rs</code>.</p>
+<ol>
+<li><code>builders.rs</code> exposes a series of utilities to craft the formatter IR; please refer to their internal
+documentation to understand what the utilities are for;</li>
+<li><code>formatter</code> exposes a set of functions to help to format some recurring patterns; please refer to their internal
+documentation to understand how to use them and when;</li>
+<li><code>format_extensions.rs</code>: with these traits, we give the ability to nodes and tokens to implements certain methods
+that are exposed based on its type. If you have a good IDE support, this feature will help you. For example:</li>
+</ol>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Default</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormatJsExportDefaultExpressionClause</span>;
+
+<span class="kw">impl</span> <span class="ident">FormatNodeRule</span><span class="op">&lt;</span><span class="ident">JsExportDefaultExpressionClause</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">FormatJsExportDefaultExpressionClauses</span>{
+     <span class="kw">fn</span> <span class="ident">fmt_fields</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;</span><span class="ident">JsExportDefaultExpressionClause</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">JsFormatter</span>) -&gt; <span class="ident">FormatResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+         <span class="kw">let</span> <span class="ident">JsExportDefaultExpressionClauseFields</span> {
+             <span class="ident">default_token</span>,
+             <span class="ident">expression</span>, <span class="comment">// it&#39;s a mandatory node</span>
+             <span class="ident">semicolon_token</span>, <span class="comment">// this is not a mandatory node</span>
+         } <span class="op">=</span> <span class="ident">node</span>.<span class="ident">as_fields</span>();
+         <span class="kw">let</span> <span class="ident">element</span> <span class="op">=</span> <span class="ident">expression</span>.<span class="ident">format</span>();
+
+         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">expression</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">expression</span><span class="question-mark">?</span> {
+             <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">expression</span>.<span class="ident">format</span>(), <span class="ident">space_token</span>()])<span class="question-mark">?</span>;
+         }
+
+         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">semicolon</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">semicolon_token</span> {
+             <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">semicolon</span>.<span class="ident">format</span>()])<span class="question-mark">?</span>;
+         } <span class="kw">else</span> {
+             <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">space_token</span>()])<span class="question-mark">?</span>;
+         }
+     }
+}</code></pre></div>
+</li>
+<li>
+<p>Use our <a href="https://play.rome.tools">playground</a> to inspect the code that you want to format. You can inspect
+the AST given by a certain snippet. This will help you to understand which nodes need to be implemented/modified
+in order to implement formatting. Alternatively, you can locally run the playground by following
+the <a href="https://github.com/rome/tools/blob/main/website/playground/README.md">playground instructions</a>.</p>
+</li>
+<li>
+<p>Use the <a href="https://github.com/rome/tools/blob/main/crates/rome_js_formatter/src/lib.rs#L597-L616"><code>quick_test()</code></a>
+function to test you snippet straight from your IDE, without running the whole test suite. The test
+is ignored on purpose, so you won’t need to worry about the CI breaking.</p>
+</li>
+</ol>
+<h3 id="write-tests-for-the-formatter"><a href="#write-tests-for-the-formatter">Write tests for the formatter</a></h3>
+<p>We use <a href="https://insta.rs/docs">insta.rs</a> for our snapshot tests, please make sure you read its documentation to learn the basics of snapshot testing.
+You should install the companion <a href="https://insta.rs/docs/cli/"><code>cargo-insta</code></a> command to assist with snapshot reviewing.</p>
+<p>Directories are divided by language, so when creating a new test file, make sure to have the correct file
+under the correct folder:</p>
+<ul>
+<li><code>JavaScript</code> =&gt; <code>js/</code> directory</li>
+<li><code>TypeScript</code> =&gt; <code>ts/</code> directory</li>
+<li><code>JSX</code> =&gt; <code>jsx/</code> directory</li>
+<li><code>TSX</code> =&gt; <code>ts/</code> directory</li>
+</ul>
+<p>To create a new snapshot test for JavaScript, create a new file to <code>crates/rome_js_formatter/tests/specs/js/</code>, e.g. <code>arrow_with_spaces.js</code></p>
+<div class="example-wrap"><pre class="language-javascript"><code>const foo     = ()    =&gt; {
+    return bar
+}</code></pre></div>
+<p>Files processed as modules must go inside the <code>module/</code> directory, files processed as script must go inside the
+<code>script/</code> directory.</p>
+<p>Run the following command to generate the new snapshot (the snapshot tests are generated by a procedure macro so we need to recompile the tests):</p>
+<div class="example-wrap"><pre class="language-bash"><code>touch crates/rome_js_formatter/tests/spec_tests.rs &amp;&amp; cargo test -p rome_js_formatter formatter</code></pre></div>
+<p>For better test driven development flow, start the formatter tests with <a href="https://crates.io/crates/cargo-watch"><code>cargo-watch</code></a>:</p>
+<div class="example-wrap"><pre class="language-bash"><code>cargo watch -i &#39;*.new&#39; -x &#39;test -p rome_js_formatter formatter&#39;</code></pre></div>
+<p>After test execution, you will get a new <code>arrow.js.snap.new</code> file.</p>
+<p>To actually update the snapshot, run <code>cargo insta review</code> to interactively review and accept the pending snapshot. <code>arrow.js.snap.new</code> will be replaced with <code>arrow.js.snap</code></p>
+<p>Sometimes, you need to verify the formatting for different cases/options. In order to do that, create a folder with
+the cases you need to verify. If we needed to follow the previous example:</p>
+<ol>
+<li>create a folder called <code>arrow_with_spaces/</code> and move the JS file there;</li>
+<li>then create a file called <code>options.json</code></li>
+<li>The content would be something like:<div class="example-wrap"><pre class="language-json"><code>{
+    &quot;cases&quot;: [
+        {
+            &quot;line_width&quot;: 120,
+            &quot;indent_style&quot;: {&quot;Space&quot;: 4}
+        }
+    ]
+}</code></pre></div></li>
+<li>the <code>cases</code> keyword is mandatory;</li>
+<li>then each object of the array will contain the matrix of options you’d want to test.
+In this case the test suite will run a <strong>second test case</strong> with <code>line_width</code> to 120 and <code>ident_style</code> with  4 spaces</li>
+<li>when the test suite is run, you will have two outputs in your snapshot: the default one and the custom one</li>
+</ol>
+<h3 id="identify-issues"><a href="#identify-issues">Identify issues</a></h3>
+<p>There are four cases when a test is not correct:</p>
+<ul>
+<li>
+<p>you try to print/format the same token multiple times; the formatter will check at runtime when a test is run;</p>
+</li>
+<li>
+<p>some tokens haven’t been printed; usually you will have this information inside the snapshot, under a section
+called <code>&quot;Unimplemented tokens/nodes&quot;</code>; a test, in order to be valid, can’t have that section;</p>
+<p>If removing a token is the actual behaviour (removing some parenthesis or a semicolon), then the correct way
+to do it by using the formatter API <code>formatter.format_replaced(token, empty_element())</code>;</p>
+</li>
+<li>
+<p>the emitted code is not a valid program anymore, the test suite will parse again the emitted code and it will
+fail if there are syntax errors;</p>
+</li>
+<li>
+<p>the emitted code, when formatted again, differs from the original; this usually happens when removing/adding new
+elements, and the grouping is not correctly set;</p>
+</li>
+</ul>
+<h3 id="write-tests-for-a-parser"><a href="#write-tests-for-a-parser">Write tests for a parser</a></h3>
+<p>If you want to create a new test for an existing parser, you will have to inline
+the code that you want to test in a comment that is created in a specific way.</p>
+<p>Let’s say that you created a new parsing feature and you need new tests from scratch,
+just go to the source code where you parse this new feature if JavaScript, and add the following comment:</p>
+
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="comment">// test feature_name</span>
+<span class="comment">// let a = { new_feature : &quot;&quot; }</span>
+<span class="comment">// let b = { new_feature : &quot;&quot; }</span>
+<span class="kw">fn</span> <span class="ident">parse_new_feature</span>(<span class="ident">p</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParsedSyntax</span> {}</code></pre></div>
+<p>The first line, <code>// test feature_name</code> the important one. This will tell to the
+testing infrastructure to create a <strong>positive test</strong> (without parsing errors), called
+<code>feature_name.js</code> inside the <code>test_data/inline/ok</code> folder.</p>
+<p>The content of this file will be:</p>
+<div class="example-wrap"><pre class="language-js"><code>let a = { new_feature : &quot;&quot; }
+let b = { new_feature : &quot;&quot; }</code></pre></div>
+<p>Basically, everything after the key comment will be the content of the new file.</p>
+<p>Now you need to run <code>cargo codegen test</code> and the task will actually generate this file for you.</p>
+<p>In case you want to create a <strong>negative test</strong> (<em>with</em> parsing errors), you will
+create a new comment like this:</p>
+<div class="example-wrap"><pre class="language-diff"><code>// test feature_name
+// let a = { new_feature : &quot;&quot; }
+// let b = { new_feature : &quot;&quot; }
+
++ // test_err feature_name
++ // let a = {  : &quot;&quot; }
++ // let b = { new_feature :  }
+fn parse_new_feature(p: &amp;mut Parser) -&gt; ParsedSyntax {}</code></pre></div>
+<p>Mind the different comment <strong><code>test_err</code></strong>, which marks the error for the test suite
+as a test that has to fail.</p>
+<p>Run the command <code>cargo codegen test</code> and you will see a new file called
+<code>feature_name.js</code> inside the <code>test_data/inline/err</code> folder.</p>
+<p>The content of this file will be:</p>
+<div class="example-wrap"><pre class="language-js"><code>let a = {  : &quot;&quot; }
+let b = { new_feature :  }</code></pre></div>
+<p>Now run the command:
+Unix/macOS</p>
+<div class="example-wrap"><pre class="language-bash"><code>env UPDATE_EXPECT=1 cargo test</code></pre></div>
+<p>Windows</p>
+<div class="example-wrap"><pre class="language-powershell"><code>set UPDATE_EXPECT=1 &amp; cargo test</code></pre></div>
+<p>The command will tell the test suite to generate and update the <code>.rast</code> files.</p>
+<p>If tests that are inside the <code>ok/</code> folder fail or if tests that are inside the <code>err/</code>
+folder don’t emit, the whole test suite will fail.</p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="context/index.html" title="rome_js_formatter::context mod">context</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="prelude/index.html" title="rome_js_formatter::prelude mod">prelude</a></div><div class="item-right docblock-short"><p>This module provides important and useful traits to help to format tokens and nodes
+when implementing the <a href="trait.FormatNodeRule.html" title="crate::FormatNodeRule">crate::FormatNodeRule</a> trait.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="utils/index.html" title="rome_js_formatter::utils mod">utils</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.FormatJsSyntaxToken.html" title="rome_js_formatter::FormatJsSyntaxToken struct">FormatJsSyntaxToken</a></div><div class="item-right docblock-short"><p>Format implementation specific to JavaScript tokens.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.FormattedIter.html" title="rome_js_formatter::FormattedIter struct">FormattedIter</a></div><div class="item-right docblock-short"></div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.AsFormat.html" title="rome_js_formatter::AsFormat trait">AsFormat</a></div><div class="item-right docblock-short"><p>Used to get an object that knows how to format this object.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.FormatNodeRule.html" title="rome_js_formatter::FormatNodeRule trait">FormatNodeRule</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.FormattedIterExt.html" title="rome_js_formatter::FormattedIterExt trait">FormattedIterExt</a></div><div class="item-right docblock-short"><p>Formatting specific <a href="https://doc.rust-lang.org/1.63.0/core/iter/traits/iterator/trait.Iterator.html" title="Iterator">Iterator</a> extensions</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.IntoFormat.html" title="rome_js_formatter::IntoFormat trait">IntoFormat</a></div><div class="item-right docblock-short"><p>Used to convert this object into an object that can be formatted.</p>
+</div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.format_node.html" title="rome_js_formatter::format_node fn">format_node</a></div><div class="item-right docblock-short"><p>Formats a JavaScript (and its super languages) file based on its features.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.format_range.html" title="rome_js_formatter::format_range fn">format_range</a></div><div class="item-right docblock-short"><p>Formats a range within a file, supported by Rome</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.format_sub_tree.html" title="rome_js_formatter::format_sub_tree fn">format_sub_tree</a></div><div class="item-right docblock-short"><p>Formats a single node within a file, supported by Rome.</p>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="rome_js_formatter" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

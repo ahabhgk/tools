@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["rome_rowan"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.63.0/core/borrow/trait.Borrow.html\" title=\"trait core::borrow::Borrow\">Borrow</a>&lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/1.63.0/std/primitive.str.html\">str</a>&gt; for <a class=\"struct\" href=\"rome_rowan/struct.SyntaxTokenText.html\" title=\"struct rome_rowan::SyntaxTokenText\">SyntaxTokenText</a>","synthetic":false,"types":["rome_rowan::syntax_token_text::SyntaxTokenText"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

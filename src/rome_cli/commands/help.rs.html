@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/rome_cli/src/commands/help.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>help.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rome_cli/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../rome_cli/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rome_cli/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">rome_console</span>::{<span class="ident">markup</span>, <span class="ident">ConsoleExt</span>, <span class="ident">Markup</span>};
+
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">CliSession</span>, <span class="ident">Termination</span>};
+
+<span class="kw">const</span> <span class="ident">VERSION</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="kw">match</span> <span class="macro">option_env!</span>(<span class="string">&quot;ROME_VERSION&quot;</span>) {
+    <span class="prelude-val">Some</span>(<span class="ident">version</span>) =&gt; <span class="ident">version</span>,
+    <span class="prelude-val">None</span> =&gt; <span class="macro">env!</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>),
+};
+
+<span class="kw">const</span> <span class="ident">MAIN</span>: <span class="ident">Markup</span> <span class="op">=</span> <span class="macro">markup!</span> {
+<span class="string">&quot;Rome CLI v&quot;</span>{<span class="ident">VERSION</span>}<span class="string">&quot;
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;COMMANDS:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    - &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;check&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    - &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;ci&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    - &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;format&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    - &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;init&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    - &quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;help&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;OPTIONS:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--no-colors&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;      Disable the formatting of markup (print everything as plain text)
+&quot;</span>
+};
+
+<span class="kw">const</span> <span class="ident">CHECK</span>: <span class="ident">Markup</span> <span class="op">=</span> <span class="macro">markup!</span> {
+    <span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;Rome Check&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;: Run the linter on a set of files
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;USAGE:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    rome check &lt;INPUTS...&gt;
+
+    INPUTS can be one or more filesystem path, each pointing to a single file or an entire directory to be searched recursively for supported files
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;OPTIONS:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--apply&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;                       Apply safe fixes
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--apply-suggested&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;             Apply safe and suggested fixes
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--max-diagnostics&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;             Cap the amount of diagnostics displayed - default 20
+&quot;</span>
+};
+
+<span class="kw">const</span> <span class="ident">FORMAT_OPTIONS</span>: <span class="ident">Markup</span> <span class="op">=</span> <span class="macro">markup!</span> {
+    <span class="string">&quot;
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--indent-style &lt;tabs|space&gt;&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;   Determine whether the formatter should use tabs or spaces for indentation (default: tabs)
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--indent-size &lt;number&gt;&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;        If the indentation style is set to spaces, determine how many spaces should be used for indentation (default: 2)
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--line-width &lt;number&gt;&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;         Determine how many characters the formatter is allowed to print in a single line (default: 80)
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--quote-style &lt;single|double&gt;&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot; Determine whether the formatter should use single or double quotes for strings (default: double)
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--stdin-file-path &lt;string&gt;&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;     Mandatory argument to use when piping content via standard input, e.g. echo &#39;let a;&#39; | rome format --stdin-filepath file.js
+&quot;</span>
+};
+
+<span class="kw">const</span> <span class="ident">CI</span>: <span class="ident">Markup</span> <span class="op">=</span> <span class="macro">markup!</span> {
+<span class="string">&quot;Rome CI: Run the linter and formatter check on a set of files
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;USAGE:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    rome ci [OPTIONS] &lt;INPUTS...&gt;
+
+    INPUTS can be one or more filesystem path, each pointing to a single file or an entire directory to be searched recursively for supported files
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;OPTIONS:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span>
+    {<span class="ident">FORMAT_OPTIONS</span>}
+};
+
+<span class="kw">const</span> <span class="ident">FORMAT</span>: <span class="ident">Markup</span> <span class="op">=</span> <span class="macro">markup!</span> {
+<span class="string">&quot;Rome Formatter
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;USAGE:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    rome format [OPTIONS] &lt;INPUTS...&gt;
+
+    INPUTS can be one or more filesystem path, each pointing to a single file or an entire directory to be searched recursively for supported files
+
+&quot;</span><span class="op">&lt;</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;OPTIONS:&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Emphasis</span><span class="op">&gt;</span><span class="string">&quot;
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--write&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;                       Write the output of the formatter to the files instead of printing the diff to the console
+    &quot;</span><span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;--skip-errors&quot;</span><span class="op">&lt;</span><span class="op">/</span><span class="ident">Dim</span><span class="op">&gt;</span><span class="string">&quot;                 Skip over files containing syntax errors instead of returning an error&quot;</span>
+    {<span class="ident">FORMAT_OPTIONS</span>}
+};
+
+<span class="kw">const</span> <span class="ident">INIT</span>: <span class="ident">Markup</span> <span class="op">=</span> <span class="macro">markup!</span> {
+<span class="string">&quot;Rome init: bootstraps a new rome project&quot;</span>
+
+};
+
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">help</span>(<span class="kw-2">mut</span> <span class="ident">session</span>: <span class="ident">CliSession</span>, <span class="ident">command</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Termination</span><span class="op">&gt;</span> {
+    <span class="kw">match</span> <span class="ident">command</span> {
+        <span class="prelude-val">Some</span>(<span class="string">&quot;help&quot;</span>) <span class="op">|</span> <span class="prelude-val">None</span> =&gt; {
+            <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">console</span>.<span class="ident">log</span>(<span class="ident">MAIN</span>);
+            <span class="prelude-val">Ok</span>(())
+        }
+        <span class="prelude-val">Some</span>(<span class="string">&quot;check&quot;</span>) =&gt; {
+            <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">console</span>.<span class="ident">log</span>(<span class="ident">CHECK</span>);
+            <span class="prelude-val">Ok</span>(())
+        }
+        <span class="prelude-val">Some</span>(<span class="string">&quot;ci&quot;</span>) =&gt; {
+            <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">console</span>.<span class="ident">log</span>(<span class="ident">CI</span>);
+            <span class="prelude-val">Ok</span>(())
+        }
+        <span class="prelude-val">Some</span>(<span class="string">&quot;format&quot;</span>) =&gt; {
+            <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">console</span>.<span class="ident">log</span>(<span class="ident">FORMAT</span>);
+            <span class="prelude-val">Ok</span>(())
+        }
+        <span class="prelude-val">Some</span>(<span class="string">&quot;init&quot;</span>) =&gt; {
+            <span class="ident">session</span>.<span class="ident">app</span>.<span class="ident">console</span>.<span class="ident">log</span>(<span class="ident">INIT</span>);
+            <span class="prelude-val">Ok</span>(())
+        }
+
+        <span class="prelude-val">Some</span>(<span class="ident">cmd</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">Termination::UnknownCommandHelp</span> {
+            <span class="ident">command</span>: <span class="ident">cmd</span>.<span class="ident">into</span>(),
+        }),
+    }
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rome_cli" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

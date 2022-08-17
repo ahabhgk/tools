@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["PrintedTokens","Tracks the ranges of the formatted (including replaced or tokens formatted as verbatim) tokens."]]};

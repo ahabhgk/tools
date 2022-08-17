@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Modifiers","Helpful data structure to make the order modifiers predictable inside the formatter"]]};

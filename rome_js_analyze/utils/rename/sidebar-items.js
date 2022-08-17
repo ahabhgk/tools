@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["JsAnyRenamableDeclaration",""],["RenameError",""]],"trait":[["RenamableNode",""],["RenameSymbolExtensions",""]]};

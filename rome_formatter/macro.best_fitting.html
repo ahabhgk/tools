@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Provides multiple different alternatives and the printer picks the first one that fits. Use this as last resort because it requires that the printer must try all variants in the worst case. The passed variants must be in the following order:"><meta name="keywords" content="rust, rustlang, rust-lang, best_fitting"><title>best_fitting in rome_formatter - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script defer src="sidebar-items.js"></script><script defer src="../main.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../rome_formatter/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../rome_formatter/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><div class="sidebar-elems"><h2 class="location"><a href="index.html">In rome_formatter</a></h2></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../rome_formatter/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Macro <a href="index.html">rome_formatter</a>::<wbr><a class="macro" href="#">best_fitting</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/rome_formatter/macros.rs.html#255-261">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><div class="docblock item-decl"><div class="example-wrap"><pre class="rust macro"><code><span class="macro">macro_rules!</span> <span class="ident">best_fitting</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">least_expanded</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">expr</span>),<span class="op">+</span> $(,)<span class="question-mark">?</span>) =&gt; { ... };
+}</code></pre></div>
+</div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Provides multiple different alternatives and the printer picks the first one that fits.
+Use this as last resort because it requires that the printer must try all variants in the worst case.
+The passed variants must be in the following order:</p>
+<ul>
+<li>First: The variant that takes up most space horizontally</li>
+<li>Last: The variant that takes up the least space horizontally by splitting the content over multiple lines.</li>
+</ul>
+<h3 id="examples"><a href="#examples">Examples</a></h3>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">rome_formatter</span>::{<span class="ident">Formatted</span>, <span class="ident">LineWidth</span>, <span class="ident">format</span>, <span class="ident">format_args</span>};
+<span class="kw">use</span> <span class="ident">rome_formatter::prelude</span>::<span class="kw-2">*</span>;
+
+<span class="kw">let</span> <span class="ident">formatted</span> <span class="op">=</span> <span class="macro">format!</span>(
+    <span class="ident">SimpleFormatContext::default</span>(),
+    [
+        <span class="ident">text</span>(<span class="string">&quot;aVeryLongIdentifier&quot;</span>),
+        <span class="macro">best_fitting!</span>(
+            <span class="comment">// Everything fits on a single line</span>
+            <span class="macro">format_args!</span>(
+                <span class="ident">text</span>(<span class="string">&quot;(&quot;</span>),
+                <span class="ident">group</span>(<span class="kw-2">&amp;</span><span class="macro">format_args!</span>[
+                    <span class="ident">text</span>(<span class="string">&quot;[&quot;</span>),
+                        <span class="ident">soft_block_indent</span>(<span class="kw-2">&amp;</span><span class="macro">format_args!</span>[
+                        <span class="ident">text</span>(<span class="string">&quot;1,&quot;</span>),
+                        <span class="ident">soft_line_break_or_space</span>(),
+                        <span class="ident">text</span>(<span class="string">&quot;2,&quot;</span>),
+                        <span class="ident">soft_line_break_or_space</span>(),
+                        <span class="ident">text</span>(<span class="string">&quot;3&quot;</span>),
+                    ]),
+                    <span class="ident">text</span>(<span class="string">&quot;]&quot;</span>)
+                ]),
+                <span class="ident">text</span>(<span class="string">&quot;)&quot;</span>)
+            ),
+
+            <span class="comment">// Breaks after `[`, but prints all elements on a single line</span>
+            <span class="macro">format_args!</span>(
+                <span class="ident">text</span>(<span class="string">&quot;(&quot;</span>),
+                <span class="ident">text</span>(<span class="string">&quot;[&quot;</span>),
+                <span class="ident">block_indent</span>(<span class="kw-2">&amp;</span><span class="ident">text</span>(<span class="string">&quot;1, 2, 3&quot;</span>)),
+                <span class="ident">text</span>(<span class="string">&quot;]&quot;</span>),
+                <span class="ident">text</span>(<span class="string">&quot;)&quot;</span>),
+            ),
+
+            <span class="comment">// Breaks after `[` and prints each element on a single line</span>
+            <span class="macro">format_args!</span>(
+                <span class="ident">text</span>(<span class="string">&quot;(&quot;</span>),
+                <span class="ident">block_indent</span>(<span class="kw-2">&amp;</span><span class="macro">format_args!</span>[
+                    <span class="ident">text</span>(<span class="string">&quot;[&quot;</span>),
+                    <span class="ident">block_indent</span>(<span class="kw-2">&amp;</span><span class="macro">format_args!</span>[
+                        <span class="ident">text</span>(<span class="string">&quot;1,&quot;</span>),
+                        <span class="ident">hard_line_break</span>(),
+                        <span class="ident">text</span>(<span class="string">&quot;2,&quot;</span>),
+                        <span class="ident">hard_line_break</span>(),
+                        <span class="ident">text</span>(<span class="string">&quot;3&quot;</span>),
+                    ]),
+                    <span class="ident">text</span>(<span class="string">&quot;]&quot;</span>),
+                ]),
+                <span class="ident">text</span>(<span class="string">&quot;)&quot;</span>)
+            )
+        )
+    ]
+).<span class="ident">unwrap</span>();
+
+<span class="kw">let</span> <span class="ident">elements</span> <span class="op">=</span> <span class="ident">formatted</span>.<span class="ident">into_format_element</span>();
+
+<span class="comment">// Takes the first variant if everything fits on a single line</span>
+<span class="macro">assert_eq!</span>(
+    <span class="string">&quot;aVeryLongIdentifier([1, 2, 3])&quot;</span>,
+    <span class="ident">Formatted::new</span>(<span class="ident">elements</span>.<span class="ident">clone</span>(), <span class="ident">SimpleFormatContext::default</span>())
+        .<span class="ident">print</span>()
+        .<span class="ident">as_code</span>()
+);
+
+<span class="comment">// It takes the second if the first variant doesn&#39;t fit on a single line. The second variant</span>
+<span class="comment">// has some additional line breaks to make sure inner groups don&#39;t break</span>
+<span class="macro">assert_eq!</span>(
+    <span class="string">&quot;aVeryLongIdentifier([\n\t1, 2, 3\n])&quot;</span>,
+    <span class="ident">Formatted::new</span>(<span class="ident">elements</span>.<span class="ident">clone</span>(), <span class="ident">SimpleFormatContext</span> { <span class="ident">line_width</span>: <span class="number">21</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>(), ..<span class="ident">SimpleFormatContext::default</span>() })
+        .<span class="ident">print</span>()
+        .<span class="ident">as_code</span>()
+);
+
+<span class="comment">// Prints the last option as last resort</span>
+<span class="macro">assert_eq!</span>(
+    <span class="string">&quot;aVeryLongIdentifier(\n\t[\n\t\t1,\n\t\t2,\n\t\t3\n\t]\n)&quot;</span>,
+    <span class="ident">Formatted::new</span>(<span class="ident">elements</span>.<span class="ident">clone</span>(), <span class="ident">SimpleFormatContext</span> { <span class="ident">line_width</span>: <span class="number">20</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>(), ..<span class="ident">SimpleFormatContext::default</span>() })
+        .<span class="ident">print</span>()
+        .<span class="ident">as_code</span>()
+);</code></pre></div>
+<h3 id="complexity"><a href="#complexity">Complexity</a></h3>
+<p>Be mindful of using this IR element as it has a considerable performance penalty:</p>
+<ul>
+<li>There are multiple representation for the same content. This results in increased memory usage
+and traversal time in the printer.</li>
+<li>The worst case complexity is that the printer tires each variant. This can result in quadratic
+complexity if used in nested structures.</li>
+</ul>
+<h3 id="behavior"><a href="#behavior">Behavior</a></h3>
+<p>This IR is similar to Prettier’s <code>conditionalGroup</code>. It provides similar functionality but
+differs in that Prettier automatically wraps each variant in a <code>Group</code>. Rome doesn’t do so.
+You can wrap the variant content in a group if you want to use soft line breaks.
+Unlike in Prettier, the printer will try to fit <strong>only the first variant</strong> in <a href="format_element/enum.PrintMode.html#variant.Flat"><code>Flat</code></a> mode,
+then it will try to fit the rest of the variants in <a href="format_element/enum.PrintMode.html#variant.Expanded"><code>Expanded</code></a> mode.</p>
+<p>A variant that is measured in <a href="format_element/enum.PrintMode.html#variant.Expanded"><code>Expanded</code></a> mode will be considered to fit if it can be printed without
+overflowing the current line with all of its inner groups expanded. Those inner groups could still end
+up being printed in flat mode if they fit on the line while printing. But there is currently no way
+to enforce that a specific group inside a variant must be flat when measuring if that variant fits.</p>
+</div></details></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="rome_formatter" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

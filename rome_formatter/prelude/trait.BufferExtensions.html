@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `BufferExtensions` trait in crate `rome_formatter`."><meta name="keywords" content="rust, rustlang, rust-lang, BufferExtensions"><title>BufferExtensions in rome_formatter::prelude - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rome_formatter/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../rome_formatter/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">BufferExtensions</a></h2><div class="sidebar-elems"><section><div class="block"><h3 class="sidebar-title"><a href="#provided-methods">Provided Methods</a></h3><ul><li><a href="#method.inspect">inspect</a></li><li><a href="#method.inspect_is_labelled">inspect_is_labelled</a></li><li><a href="#method.inspect_will_break">inspect_will_break</a></li><li><a href="#method.write_elements">write_elements</a></li></ul></div><div class="block"><h3 class="sidebar-title"><a href="#implementors">Implementors</a></h3></div></section><h2 class="location"><a href="index.html">In rome_formatter::prelude</a></h2></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rome_formatter/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Trait <a href="../index.html">rome_formatter</a>::<wbr><a href="index.html">prelude</a>::<wbr><a class="trait" href="#">BufferExtensions</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/rome_formatter/buffer.rs.html#419-550">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><div class="docblock item-decl"><pre class="rust trait"><code>pub trait BufferExtensions: <a class="trait" href="../trait.Buffer.html" title="trait rome_formatter::Buffer">Buffer</a> + <a class="trait" href="https://doc.rust-lang.org/1.63.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> {
+    fn <a href="#method.inspect" class="fnname">inspect</a>&lt;F&gt;(&amp;mut self, inspector: F) -&gt; <a class="struct" href="../struct.Inspect.html" title="struct rome_formatter::Inspect">Inspect</a>&lt;'_, Self::<a class="associatedtype" href="../trait.Buffer.html#associatedtype.Context" title="type rome_formatter::Buffer::Context">Context</a>, F&gt;<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/1.63.0/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="enum" href="../format_element/enum.FormatElement.html" title="enum rome_formatter::format_element::FormatElement">FormatElement</a>)</span>,
+    { ... }
+<span class="item-spacer"></span>    fn <a href="#method.write_elements" class="fnname">write_elements</a>&lt;I&gt;(&amp;mut self, elements: I) -&gt; <a class="type" href="../type.FormatResult.html" title="type rome_formatter::FormatResult">FormatResult</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.63.0/std/primitive.unit.html">()</a>&gt;<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I: <a class="trait" href="https://doc.rust-lang.org/1.63.0/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator">IntoIterator</a>&lt;Item = <a class="enum" href="../format_element/enum.FormatElement.html" title="enum rome_formatter::format_element::FormatElement">FormatElement</a>&gt;</span>,
+    { ... }
+<span class="item-spacer"></span>    fn <a href="#method.inspect_will_break" class="fnname">inspect_will_break</a>(&amp;mut self) -&gt; <a class="struct" href="../struct.WillBreakBuffer.html" title="struct rome_formatter::WillBreakBuffer">WillBreakBuffer</a>&lt;'_, Self::<a class="associatedtype" href="../trait.Buffer.html#associatedtype.Context" title="type rome_formatter::Buffer::Context">Context</a>&gt; { ... }
+<span class="item-spacer"></span>    fn <a href="#method.inspect_is_labelled" class="fnname">inspect_is_labelled</a>&lt;T:&nbsp;?<a class="trait" href="https://doc.rust-lang.org/1.63.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + 'static&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self<br>&nbsp;&nbsp;&nbsp;&nbsp;) -&gt; <a class="struct" href="../struct.HasLabelBuffer.html" title="struct rome_formatter::HasLabelBuffer">HasLabelBuffer</a>&lt;'_, Self::<a class="associatedtype" href="../trait.Buffer.html#associatedtype.Context" title="type rome_formatter::Buffer::Context">Context</a>&gt; { ... }
+}</code></pre></div><h2 id="provided-methods" class="small-section-header">Provided Methods<a href="#provided-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="method.inspect" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/rome_formatter/buffer.rs.html#422-427">source</a></div><h4 class="code-header">fn <a href="#method.inspect" class="fnname">inspect</a>&lt;F&gt;(&amp;mut self, inspector: F) -&gt; <a class="struct" href="../struct.Inspect.html" title="struct rome_formatter::Inspect">Inspect</a>&lt;'_, Self::<a class="associatedtype" href="../trait.Buffer.html#associatedtype.Context" title="type rome_formatter::Buffer::Context">Context</a>, F&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/1.63.0/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="enum" href="../format_element/enum.FormatElement.html" title="enum rome_formatter::format_element::FormatElement">FormatElement</a>),&nbsp;</span></h4></div></summary><div class="docblock"><p>Returns a new buffer that calls the passed inspector for every element that gets written to the output</p>
+</div></details><details class="rustdoc-toggle" open><summary><div id="method.write_elements" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/rome_formatter/buffer.rs.html#430-439">source</a></div><h4 class="code-header">fn <a href="#method.write_elements" class="fnname">write_elements</a>&lt;I&gt;(&amp;mut self, elements: I) -&gt; <a class="type" href="../type.FormatResult.html" title="type rome_formatter::FormatResult">FormatResult</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.63.0/std/primitive.unit.html">()</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;I: <a class="trait" href="https://doc.rust-lang.org/1.63.0/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator">IntoIterator</a>&lt;Item = <a class="enum" href="../format_element/enum.FormatElement.html" title="enum rome_formatter::format_element::FormatElement">FormatElement</a>&gt;,&nbsp;</span></h4></div></summary><div class="docblock"><p>Writes a sequence of elements into this buffer.</p>
+</div></details><details class="rustdoc-toggle" open><summary><div id="method.inspect_will_break" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/rome_formatter/buffer.rs.html#491-493">source</a></div><h4 class="code-header">fn <a href="#method.inspect_will_break" class="fnname">inspect_will_break</a>(&amp;mut self) -&gt; <a class="struct" href="../struct.WillBreakBuffer.html" title="struct rome_formatter::WillBreakBuffer">WillBreakBuffer</a>&lt;'_, Self::<a class="associatedtype" href="../trait.Buffer.html#associatedtype.Context" title="type rome_formatter::Buffer::Context">Context</a>&gt;</h4></div></summary><div class="docblock"><p>It emits a custom buffer called <a href="../struct.WillBreakBuffer.html" title="WillBreakBuffer">WillBreakBuffer</a>, which tracks
+it he last element written in the main buffer breaks, it does so by
+checking if their IR emits an <a href="../format_element/enum.FormatElement.html">element</a> that breaks.</p>
+<p>This functionality can be used only one element and only after the element
+is written in the buffer.</p>
+<h6 id="examples"><a href="#examples">Examples</a></h6>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">rome_formatter</span>::{<span class="ident">format</span>, <span class="ident">format_args</span>, <span class="ident">write</span>, <span class="ident">LineWidth</span>};
+<span class="kw">use</span> <span class="ident">rome_formatter::prelude</span>::<span class="kw-2">*</span>;
+
+<span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="ident">SimpleFormatContext</span> {
+    <span class="ident">line_width</span>: <span class="ident">LineWidth::try_from</span>(<span class="number">20</span>).<span class="ident">unwrap</span>(),
+    ..<span class="ident">SimpleFormatContext::default</span>()
+};
+
+
+<span class="kw">let</span> <span class="ident">formatted</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="ident">context</span>, [<span class="ident">format_with</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> {
+
+    <span class="kw">let</span> <span class="ident">element</span> <span class="op">=</span> <span class="ident">format_with</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> {
+        <span class="macro">write!</span>(<span class="ident">f</span>, [
+            <span class="ident">text</span>(<span class="string">&quot;hello&quot;</span>),
+            <span class="ident">hard_line_break</span>(),
+            <span class="ident">text</span>(<span class="string">&quot;world!&quot;</span>)
+        ])
+    });
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">f</span>.<span class="ident">inspect_will_break</span>();
+    <span class="macro">write!</span>(<span class="ident">buffer</span>, [<span class="ident">element</span>])<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">does_element_break</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">will_break</span>();
+
+    <span class="kw">if</span> <span class="ident">does_element_break</span> {
+        <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">hard_line_break</span>(), <span class="ident">text</span>(<span class="string">&quot;break&quot;</span>)])
+    } <span class="kw">else</span> {
+        <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">text</span>(<span class="string">&quot;did not break&quot;</span>)])
+    }
+
+})]).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq!</span>(
+    <span class="string">&quot;hello\nworld!\nbreak&quot;</span>,
+    <span class="ident">formatted</span>.<span class="ident">print</span>().<span class="ident">as_code</span>()
+);</code></pre></div>
+<h6 id="alternatives"><a href="#alternatives">Alternatives</a></h6>
+<p>Use <code>Memoized.inspect(f)?.will_break()</code> if you need to know if some content breaks that should
+only be written later.</p>
+</div></details><details class="rustdoc-toggle" open><summary><div id="method.inspect_is_labelled" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/rome_formatter/buffer.rs.html#546-549">source</a></div><h4 class="code-header">fn <a href="#method.inspect_is_labelled" class="fnname">inspect_is_labelled</a>&lt;T:&nbsp;?<a class="trait" href="https://doc.rust-lang.org/1.63.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a> + 'static&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self<br>) -&gt; <a class="struct" href="../struct.HasLabelBuffer.html" title="struct rome_formatter::HasLabelBuffer">HasLabelBuffer</a>&lt;'_, Self::<a class="associatedtype" href="../trait.Buffer.html#associatedtype.Context" title="type rome_formatter::Buffer::Context">Context</a>&gt;</h4></div></summary><div class="docblock"><p>Wraps the current buffer in a <a href="../struct.HasLabelBuffer.html" title="HasLabelBuffer">HasLabelBuffer</a>, which tracks
+labelled elements written in the main buffer, it does so by
+checking if <a href="../format_element/enum.FormatElement.html">element</a> is a <a href="../format_element/enum.FormatElement.html#variant.Label">label</a>
+with the expected <a href="../format_element/struct.LabelId.html">label_id</a>.</p>
+<p>This functionality can be used only on one element and only after the element
+is written in the buffer.</p>
+<h6 id="examples-1"><a href="#examples-1">Examples</a></h6>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">rome_formatter::prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">rome_formatter</span>::{<span class="ident">format</span>, <span class="ident">write</span>, <span class="ident">LineWidth</span>};
+
+<span class="kw">enum</span> <span class="ident">SomeLabelId</span> {}
+
+<span class="kw">let</span> <span class="ident">context</span> <span class="op">=</span> <span class="ident">SimpleFormatContext</span> {
+    <span class="ident">line_width</span>: <span class="ident">LineWidth::try_from</span>(<span class="number">20</span>).<span class="ident">unwrap</span>(),
+    ..<span class="ident">SimpleFormatContext::default</span>()
+};
+
+<span class="kw">let</span> <span class="ident">formatted</span> <span class="op">=</span> <span class="macro">format!</span>(
+    <span class="ident">context</span>,
+    [<span class="ident">format_with</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">f</span>.<span class="ident">inspect_is_labelled</span>::<span class="op">&lt;</span><span class="ident">SomeLabelId</span><span class="op">&gt;</span>();
+
+        <span class="macro">write!</span>(<span class="ident">buffer</span>, [
+            <span class="ident">labelled</span>(
+                <span class="ident">LabelId::of</span>::<span class="op">&lt;</span><span class="ident">SomeLabelId</span><span class="op">&gt;</span>(),
+                <span class="kw-2">&amp;</span><span class="ident">text</span>(<span class="string">&quot;&#39;I have a label&#39;&quot;</span>)
+            )
+        ])<span class="question-mark">?</span>;
+
+        <span class="kw">let</span> <span class="ident">is_labelled</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">has_label</span>();
+
+        <span class="kw">if</span> <span class="ident">is_labelled</span> {
+            <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">text</span>(<span class="string">&quot; has label SomeLabelId&quot;</span>)])
+        } <span class="kw">else</span> {
+            <span class="macro">write!</span>(<span class="ident">f</span>, [<span class="ident">text</span>(<span class="string">&quot; doesn&#39;t have label SomeLabelId&quot;</span>)])
+        }
+    })]
+)
+.<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq!</span>(<span class="string">&quot;&#39;I have a label&#39; has label SomeLabelId&quot;</span>, <span class="ident">formatted</span>.<span class="ident">print</span>().<span class="ident">as_code</span>());</code></pre></div>
+<p>/// ## Alternatives</p>
+<p>Use <code>Memoized.inspect(f)?.has_label(LabelId::of::&lt;SomeLabelId&gt;()</code> if you need to know if some content breaks that should
+only be written later.</p>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"><section id="impl-BufferExtensions" class="impl has-srclink"><span class="rightside"><a class="srclink" href="../../src/rome_formatter/buffer.rs.html#552">source</a></span><a href="#impl-BufferExtensions" class="anchor"></a><h3 class="code-header in-band">impl&lt;T&gt; <a class="trait" href="trait.BufferExtensions.html" title="trait rome_formatter::prelude::BufferExtensions">BufferExtensions</a> for T <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: <a class="trait" href="../trait.Buffer.html" title="trait rome_formatter::Buffer">Buffer</a>,&nbsp;</span></h3></section></div><script type="text/javascript" src="../../implementors/rome_formatter/buffer/trait.BufferExtensions.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rome_formatter" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["FormatSettings","Formatter settings for the entire workspace"],["LanguageSettings",""],["LanguagesSettings","Static map of language names to language-specific settings"],["LinterSettings","Linter settings for the entire workspace"],["WorkspaceSettings","Global settings for the entire workspace"]],"trait":[["Language",""]]};
